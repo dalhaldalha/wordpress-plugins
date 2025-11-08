@@ -52,19 +52,15 @@ register_activation_hook(
 // Deactivation Hook
 function cg_deactivate() {
     // This code runs once when the plugin is deactivated
-
-    // Example: clear the scheduled event
-    wp_clear_scheduled_hook('customgreeting_daily_event');
 	error_log("CG Plugin deactivated at " . date('Y-m-d H:i:s', time()));
 
-    // Optional: remove temporary data
-    // delete_option('testplugin_installed_time');
 }
 register_deactivation_hook(
 	__FILE__, 
 	'cg_deactivate'
 );
 
-require_once plugin_dir_path(__FILE__) . 'includes/functions.php';
-require_once plugin_dir_path(__FILE__) . "admin/settings-page.php";
+//Loads all the required files
+require_once CG_PLUGIN_DIR . 'includes/functions.php';
+require_once CG_PLUGIN_DIR . 'admin/settings-page.php';
 
