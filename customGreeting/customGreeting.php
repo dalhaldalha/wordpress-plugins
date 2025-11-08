@@ -14,31 +14,35 @@ if (! defined('ABSPATH')){
     exit;
 };
 
-if (! defined('ABSPATH')){
-    exit;
-};
-
-if (! defined('ABSPATH')){
-    exit;
-};
-
 
 define( 'CG_PLUGIN_DIR', plugin_dir_path(__FILE__));
-define( 'CG_PLUGIN URL', plugin_dir_url(__FILE__));
+define( 'CG_PLUGIN_URL', plugin_dir_url(__FILE__));
+define( 'CG_OPTION_NAME', 'cg_options');
 
 // Activation Hook
 function cg_activate() {
-    // This code runs once when the plugin is activated
-    add_option('customgreeting_installed_time', time());
-	error_log("CG Plugin activated at " . date('Y-m-d H:i:s', time()));
 
-    // Example: schedule a recurring event
-    if (!wp_next_scheduled('customgreeting_daily_event')) {
-        wp_schedule_event(time(), 'daily', 'customgreeting_daily_event');
+    // Set default options
+    $defaults = array(
+        'greeting_text' => 'Welcom to my site!',
+        'position' => 'top',
+        'enabled' => 1,
+    );
+
+    // checks if the option already exists in the database
+    if ( false === get_option(CG_OPTION_NAME)) {
+        add_option(CG_OPTION_NAME, $defaults);
+    } else {
+        // Retreives options and merges with defaults then updates
+        $opts = get_option(CG_OPTION_NAME, array());
+        $opts = wp_parse_args( $opts, $defaults );
+        update_option(CG_OPtion_NAME, $opts);
     }
 
-    // You can also create database tables or default settings here
+    //Logs date and time of activation
+	error_log("CG Plugin activated at " . date('Y-m-d H:i:s', time()));
 }
+
 register_activation_hook(
 	__FILE__,
 	'cg_activate'
